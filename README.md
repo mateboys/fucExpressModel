@@ -208,13 +208,6 @@ CORS_ORIGIN=http://localhost:3000
   - 请求响应时间
   - 错误率统计
 
-## 贡献指南
-
-1. Fork 项目
-2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
-3. 提交改动 (`git commit -m 'Add some AmazingFeature'`)
-4. 推送到分支 (`git push origin feature/AmazingFeature`)
-5. 提交 Pull Request
 
 ## License
 

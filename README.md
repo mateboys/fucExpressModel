@@ -1,6 +1,6 @@
-# 电商后台管理系统 API
+# Express通用后端项目模版
 
-基于 Express.js 构建的现代化电商后台 API 服务，采用 ES Modules 规范。
+基于 Express.js 构建的现代化后台 API 服务模版，采用 ES Modules 规范。
 
 ## 技术栈
 
@@ -25,8 +25,8 @@
 ├── src/
 │   ├── routes/          # 路由定义
 │   │   ├── index.js     # 基础路由
-│   │   ├── users.js     # 用户相关路由
-│   │   └── products.js  # 商品相关路由
+│   │   ├── users.js     # 示例用户模块相关路由
+│   │   └── products.js  # 示例产品模块相关路由
 │   ├── middlewares/     # 中间件
 │   │   └── errorHandler.js
 │   └── utils/          # 工具函数
@@ -134,11 +134,11 @@ CORS_ORIGIN=http://localhost:3000
 - `PUT /api/users/profile` - 更新用户信息
 
 ### 商品路由
-- `GET /api/products` - 获取商品列表
-- `POST /api/products` - 创建商品
-- `GET /api/products/:id` - 获取商品详情
-- `PUT /api/products/:id` - 更新商品
-- `DELETE /api/products/:id` - 删除商品
+- `GET /api/products` - 获取产品列表
+- `POST /api/products` - 创建产品
+- `GET /api/products/:id` - 获取产品详情
+- `PUT /api/products/:id` - 更新产品
+- `DELETE /api/products/:id` - 删除产品
 
 ## 开发指南
 

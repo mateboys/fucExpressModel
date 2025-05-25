@@ -1,6 +1,6 @@
-# 电商后台管理系统 API
+# Express 通用后端模版 API
 
-基于 Express.js 构建的现代化电商后台 API 服务，采用 ES Modules 规范。
+基于 Express.js 构建的现代化后台 API 服务，采用 ES Modules 规范。
 
 ## 技术栈
 
@@ -27,8 +27,8 @@
 ├── src/
 │   ├── routes/          # 路由定义
 │   │   ├── index.js     # 基础路由
-│   │   ├── users.js     # 用户相关路由
-│   │   └── products.js  # 商品相关路由
+│   │   ├── users.js     # 示例用户相关路由
+│   │   └── products.js  # 示例商品相关路由
 │   ├── middlewares/     # 中间件
 │   │   └── errorHandler.js
 │   └── utils/          # 工具函数
@@ -36,7 +36,7 @@
 ├── public/             # 静态资源
 ├── bin/
 │   └── www.js          # 应用启动脚本
-├── ecosystem.config.cjs # PM2 配置文件
+├── ecosystem.config.cjs # PM2 配置文件(cjs规范)
 ├── app.js              # 应用主文件
 ├── package.json
 └── .env               # 环境变量配置

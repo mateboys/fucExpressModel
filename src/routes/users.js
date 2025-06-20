@@ -1,76 +1,47 @@
 import express from 'express';
-import { userQueries } from '../db/index.js';
-import { hashPassword, verifyPassword, generateToken } from '../utils/auth.js';
-import { authenticate } from '../middlewares/auth.js';
+import { handleUserLogin, handleUserRegister, handleGetUserProfile } from '../handlers/userHandlers.js';
+import { AppError } from '../middlewares/errorHandler.js';
 import { ResponseCode } from '../utils/response.js';
 
 const router = express.Router();
 
-// 用户注册 - POST /api/users/register
-router.post('/register', async (req, res) => {
-  const { email, password, name } = req.body;
-  
+// 用户登录路由
+router.post('/login', async (req, res, next) => {
   try {
-    // 检查邮箱是否已存在
-    const existingUser = await userQueries.findByEmail(email);
-    if (existingUser.length > 0) {
-      return res.error(ResponseCode.CONFLICT, '邮箱已被注册', {
-        field: 'email'
-      });
+    if (!req.body.username || !req.body.password) {
+      throw new AppError('用户名和密码不能为空', ResponseCode.BAD_REQUEST);
     }
-
-    // 创建新用户
-    const hashedPassword = hashPassword(password);
-    await userQueries.create({ email, password: hashedPassword, name });
-    
-    res.success({ email, name }, '注册成功');
+    const result = await handleUserLogin(req.body);
+    res.success(result);
   } catch (error) {
-    res.error(ResponseCode.INTERNAL_ERROR, '服务器错误', {
-      error: error.message
-    });
+    next(error);
   }
 });
 
-// 用户登录 - POST /api/users/login
-router.post('/login', async (req, res) => {
-  const { email, password } = req.body;
-  
+// 用户注册路由
+router.post('/register', async (req, res, next) => {
   try {
-    // 查找用户
-    const users = await userQueries.findByEmail(email);
-    const user = users[0];
-    
-    if (!user || !verifyPassword(password, user.password)) {
-      return res.error(ResponseCode.UNAUTHORIZED, '邮箱或密码错误', {
-        field: 'credentials'
-      });
+    if (!req.body.username || !req.body.password || !req.body.email) {
+      throw new AppError('注册信息不完整', ResponseCode.BAD_REQUEST);
     }
-
-    // 生成 token
-    const token = generateToken(user);
-    res.success({ token, userId: user.id });
+    const result = await handleUserRegister(req.body);
+    res.success(result);
   } catch (error) {
-    res.error(ResponseCode.INTERNAL_ERROR, '服务器错误', {
-      error: error.message
-    });
+    next(error);
   }
 });
 
-// 获取用户信息 - GET /api/users/profile
-router.get('/profile', authenticate, async (req, res) => {
+// 获取用户信息路由
+router.get('/profile', async (req, res, next) => {
   try {
-    const user = await userQueries.findById(req.user.id);
-    if (!user) {
-      return res.error(ResponseCode.NOT_FOUND, '用户不存在', {
-        userId: req.user.id
-      });
+    if (!req.query.userId) {
+      throw new AppError('用户ID不能为空', ResponseCode.BAD_REQUEST);
     }
-    
-    // 移除敏感信息
-    const { password, ...userData } = user;
-    res.success({ user: userData });
+    // 注意：现在用户信息在 req.auth 中
+    const result = await handleGetUserProfile(req.query.userId);
+    res.success(result);
   } catch (error) {
-    res.error(ResponseCode.INTERNAL_ERROR, '服务器错误');
+    next(error);
   }
 });
 

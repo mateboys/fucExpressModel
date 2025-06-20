@@ -1,99 +1,61 @@
 import express from 'express';
-import { authenticate } from '../middlewares/auth.js';
-import { ResponseCode } from '../utils/response.js';
+import {
+  handleGetProducts,
+  handleGetProductDetail,
+  handleCreateProduct,
+  handleUpdateProduct,
+  handleDeleteProduct
+} from '../handlers/productHandlers.js';
 
 const router = express.Router();
 
-// 获取商品列表 - GET /api/products
-router.get('/', async (req, res) => {
+// 获取产品列表
+router.get('/', async (req, res, next) => {
   try {
-    // 这里添加获取商品列表的逻辑
-    res.success({ 
-      products: [],
-      total: 0,
-      page: 1,
-      pageSize: 10
-    });
+    const result = await handleGetProducts(req.query);
+    res.success(result);
   } catch (error) {
-    res.error(ResponseCode.INTERNAL_ERROR, '服务器错误', {
-      error: error.message
-    });
+    next(error);
   }
 });
 
-// 获取单个商品 - GET /api/products/:id
-router.get('/:id', async (req, res) => {
+// 获取单个产品详情
+router.get('/:id', async (req, res, next) => {
   try {
-    const { id } = req.params;
-    // 这里添加获取单个商品的逻辑
-    res.success({ 
-      product: {
-        id,
-        name: '示例商品',
-        price: 0,
-        description: ''
-      }
-    });
+    const result = await handleGetProductDetail(req.params.id);
+    res.success(result);
   } catch (error) {
-    res.error(ResponseCode.INTERNAL_ERROR, '服务器错误', {
-      error: error.message
-    });
+    next(error);
   }
 });
 
-// 创建商品 - POST /api/products
-router.post('/', authenticate, async (req, res) => {
+// 创建新产品
+router.post('/', async (req, res, next) => {
   try {
-    const { name, price, description } = req.body;
-    // 这里添加创建商品的逻辑
-    res.success({ 
-      product: {
-        id: 1,
-        name,
-        price,
-        description
-      }
-    }, '商品创建成功');
+    const result = await handleCreateProduct(req.body);
+    res.success(result);
   } catch (error) {
-    res.error(ResponseCode.INTERNAL_ERROR, '服务器错误', {
-      error: error.message
-    });
+    next(error);
   }
 });
 
-// 更新商品 - PUT /api/products/:id
-router.put('/:id', authenticate, async (req, res) => {
+// 更新产品信息
+router.put('/:id', async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const { name, price, description } = req.body;
-    // 这里添加更新商品的逻辑
-    res.success({ 
-      product: {
-        id,
-        name,
-        price,
-        description
-      }
-    }, '商品更新成功');
+    const result = await handleUpdateProduct(req.params.id, req.body);
+    res.success(result);
   } catch (error) {
-    res.error(ResponseCode.INTERNAL_ERROR, '服务器错误', {
-      error: error.message
-    });
+    next(error);
   }
 });
 
-// 删除商品 - DELETE /api/products/:id
-router.delete('/:id', authenticate, async (req, res) => {
+// 删除产品
+router.delete('/:id', async (req, res, next) => {
   try {
-    const { id } = req.params;
-    // 这里添加删除商品的逻辑
-    res.success({ 
-      deletedId: id 
-    }, '商品删除成功');
+    const result = await handleDeleteProduct(req.params.id);
+    res.success(result);
   } catch (error) {
-    res.error(ResponseCode.INTERNAL_ERROR, '服务器错误', {
-      error: error.message
-    });
+    next(error);
   }
 });
 

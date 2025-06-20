@@ -13,6 +13,7 @@ import userRoutes from './src/routes/users.js';
 import productRoutes from './src/routes/products.js';
 import { errorHandler } from './src/middlewares/errorHandler.js';
 import { responseHandler } from './src/utils/response.js';
+import { authenticate, handleJWTError } from './src/middlewares/auth.js';
 
 // 环境变量配置
 dotenv.config();
@@ -39,6 +40,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(responseHandler);
 
+// JWT 认证中间件
+app.use(authenticate);
+app.use(handleJWTError);
+
 // API 路由
 const apiRouter = express.Router();
 app.use('/api', apiRouter);
@@ -48,7 +53,7 @@ apiRouter.use('/', indexRoutes);           // 基础路由: /api/health, /api/ve
 apiRouter.use('/users', userRoutes);       // 用户路由: /api/users/xxx
 apiRouter.use('/products', productRoutes); // 商品路由: /api/products/xxx
 
-// 404处理
+// 404处理 - 在所有路由之后，处理未匹配的请求
 app.use((req, res) => {
   res.status(404).json({
     code: 404,
@@ -57,7 +62,7 @@ app.use((req, res) => {
   });
 });
 
-// 错误处理中间件
+// 错误处理中间件 - 虽然定义在最后，但会处理所有前面中间件和路由中的错误
 app.use(errorHandler);
 
 export default app;

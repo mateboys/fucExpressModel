@@ -1,6 +1,6 @@
-# Express 通用后端模版 API
+# 电商后台管理系统 API
 
-基于 Express.js 构建的现代化后台 API 服务，采用 ES Modules 规范。
+基于 Express.js 构建的现代化电商后台 API 服务，采用 ES Modules 规范。
 
 ## 技术栈
 
@@ -27,8 +27,8 @@
 ├── src/
 │   ├── routes/          # 路由定义
 │   │   ├── index.js     # 基础路由
-│   │   ├── users.js     # 示例用户相关路由
-│   │   └── products.js  # 示例商品相关路由
+│   │   ├── users.js     # 用户相关路由
+│   │   └── products.js  # 商品相关路由
 │   ├── middlewares/     # 中间件
 │   │   └── errorHandler.js
 │   └── utils/          # 工具函数
@@ -36,7 +36,7 @@
 ├── public/             # 静态资源
 ├── bin/
 │   └── www.js          # 应用启动脚本
-├── ecosystem.config.cjs # PM2 配置文件(cjs规范)
+├── ecosystem.config.cjs # PM2 配置文件
 ├── app.js              # 应用主文件
 ├── package.json
 └── .env               # 环境变量配置
@@ -94,7 +94,7 @@ cp .env.example .env
 
 4. **启动服务**
 ```bash
-npm run start  #启动实例(单进程) 第一种方式
+npm run start  #启动实例(单进程)  第一种方式
 npm run prod:start  # 启动所有实例(多进程 PM2)  第二种方式
 ```
 
